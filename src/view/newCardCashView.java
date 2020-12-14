@@ -1,6 +1,6 @@
 package view;
 
-import Dao.CardDao;
+import Dao.VipCardDao;
 import Dao.CashCardDao;
 
 import javax.swing.*;
@@ -21,14 +21,14 @@ public class newCardCashView {
         JTextField vipCard_t = new JTextField(20);
         JButton enter = new JButton("确定");
         JButton cancel = new JButton("取消");
-        JLabel isVip_l = new JLabel("是否拥有会员卡");
+        JLabel isVip_l = new JLabel("是否办理会员卡");
         JLabel vipCard_l = new JLabel("会员卡号：");
         JRadioButton isVip_y =new JRadioButton("是");
         JRadioButton isVip_n = new JRadioButton("否");
         ButtonGroup bg = new ButtonGroup();
         //设置控件格式
         message.setFont(new Font("宋体",Font.BOLD,15));
-        message.setBounds(10,30,100,25);
+        message.setBounds(10,30,200,25);
         card_l.setBounds(30,100,100,25);
         card_t.setBounds(100,100,200,25);
         name_l.setBounds(30,165,100,25);
@@ -63,7 +63,6 @@ public class newCardCashView {
         panel.add(cancel);
         panel.add(vipCard_l);
         panel.add(vipCard_t);
-        newcardFrame.setResizable(false);
         newcardFrame.setSize(500,450);
         newcardFrame.setVisible(true);
         newcardFrame.setLocation(500,400);
@@ -103,53 +102,66 @@ public class newCardCashView {
                     @Override
                     public void run() {
                         String card = card_t.getText();
+                        CashCardDao cc = new CashCardDao();
+                        VipCardDao vc = new VipCardDao();
+                        try {
+                            Object[] c_result = cc.selectCashCard(card);
+                            if (c_result[0] != null){
+                                JOptionPane.showMessageDialog(null,"已经存在该购物卡！");
+                            }else {
+                                if (!card.equals("")){
 
-                        if (true/*!card.equals("") && !name.equals("")*/){
-                            CashCardDao cc = new CashCardDao();
-                            CardDao cd = new CardDao();
-                            if (vipCard_t.isEditable()){
-                                String name = name_t.getText();
-                                String vipcard = vipCard_t.getText();
-                                try {
-                                    //判断会员输入是否正确，正确即注册新购物卡
-                                    Object[] vip_result = cd.selectCashCard(vipcard,name);
-                                    if (vip_result[0] != null){
-                                        int result = cc.insertCashCard(card,vipcard);
-                                        if (result > 0){
-                                            JOptionPane.showMessageDialog(null,"注册购物卡成功！");
+                                    if (vipCard_t.isEditable()){
+                                        String name = name_t.getText();
+                                        String vipcard = vipCard_t.getText();
+                                        try {
+                                            //判断会员输入是否正确，正确即注册新购物卡
+                                            Object[] vip_result = vc.selectCashCard(vipcard,name);
+                                            if (vip_result[0] != null){
+                                                JOptionPane.showMessageDialog(null,"该号已有会员卡");
+                                            }else{
+                                                if(!name.equals("")&&!vipcard.equals("")){
+                                                    int result = cc.insertCashCard(card,name,vipcard);
+                                                    if (result > 0){
+                                                        JOptionPane.showMessageDialog(null,"注册购物卡成功！");
+                                                    }
+                                                    else {
+                                                        JOptionPane.showMessageDialog(null,"注册购物卡失败！");
+                                                    }
+                                                }else {
+                                                    JOptionPane.showMessageDialog(null,"姓名或会员卡号不能为空");
+                                                };
+
+                                            }
+                                        } catch (SQLException ex) {
+                                            ex.printStackTrace();
                                         }
-                                        else {
-                                            JOptionPane.showMessageDialog(null,"注册购物卡失败！");
+                                    }else{
+                                        try {
+                                            //注册没有会员卡的购物卡
+                                            int result = cc.insertCashCard(card);
+                                            if (result > 0){
+                                                JOptionPane.showMessageDialog(null,"注册购物卡成功！");
+                                            }
+                                            else {
+                                                JOptionPane.showMessageDialog(null,"注册购物卡失败！");
+                                            }
+
+                                        } catch (SQLException ex) {
+                                            ex.printStackTrace();
                                         }
+
                                     }
-                                    else {
-                                        JOptionPane.showMessageDialog(null,"会员卡号或姓名不能为空！");
-                                    }
-                                } catch (SQLException ex) {
-                                    ex.printStackTrace();
+
+                                }
+                                else {
+                                    JOptionPane.showMessageDialog(null,"卡号不能为空！");
                                 }
                             }
-                            else{
-                                try {
-                                    //注册没有会员卡的购物卡
-                                    int result = cc.insertCashCard(card);
-                                    if (result > 0){
-                                        JOptionPane.showMessageDialog(null,"注册购物卡成功！");
-                                    }
-                                    else {
-                                        JOptionPane.showMessageDialog(null,"注册购物卡失败！");
-                                    }
-
-                                } catch (SQLException ex) {
-                                    ex.printStackTrace();
-                                }
-
-                            }
-
+                        } catch (SQLException throwables) {
+                            throwables.printStackTrace();
                         }
-                        else {
-                            JOptionPane.showMessageDialog(null,"卡号或用户名不能为空！");
-                        }
+
                     }
                 });
             }

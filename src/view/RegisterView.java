@@ -25,7 +25,7 @@ public class RegisterView {
         JButton cancel = new JButton("取消");
         //设置控件格式
         message.setFont(new Font("宋体",Font.BOLD,15));
-        message.setBounds(10,30,100,25);
+        message.setBounds(10,30,200,25);
         no_l.setBounds(30,100,100,25);
         no_t.setBounds(80,100,200,25);
         name_l.setBounds(30,130,100,25);

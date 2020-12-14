@@ -9,4 +9,5 @@ public class Main {
         SwingUtilities.invokeLater(LoginView::new);
     }
 
+
 }

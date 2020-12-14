@@ -6,20 +6,19 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class CardDao extends Jdbc_Conn {
-    //会员卡表
+public class VipCardDao extends Jdbc_Conn {
+    //会员相关处理
 
     ResultSet rs = null;
     PreparedStatement pt = null;
 
     //查询会员信息
-    public Object[] selectCashCard(String card,String name) throws SQLException {
+    public Object[] selectCashCard(String vipcard,String name) throws SQLException {
         jdbc();
         try {
-            String selectCashCard_sql = "SELECT * from vipcard WHERE v_card = ? AND v_name = ?";
+            String selectCashCard_sql = "SELECT * from vipcard WHERE v_card = ?";
             pt = conn.prepareStatement(selectCashCard_sql);
-            pt.setString(1,card);
-            pt.setString(2,name);
+            pt.setString(1,vipcard);
 
             rs = pt.executeQuery();
 
@@ -40,6 +39,7 @@ public class CardDao extends Jdbc_Conn {
             return null;
         }
     }
+
     public Object[] selectCashCard(String card) throws SQLException {
         jdbc();
         try {

@@ -1,6 +1,6 @@
 package view;
 
-import Dao.CardDao;
+import Dao.VipCardDao;
 import Dao.CashCardDao;
 import Dao.CashDao;
 import Dao.GoodsDao;
@@ -175,7 +175,7 @@ public class CashView{
 						String cashCardID = cashCard_t.getText();
 						try {
 							if (!vipID.equals("") && vipCard_t.isEditable()){
-								Object[] vipID_db = new CardDao().selectCashCard(vipID);
+								Object[] vipID_db = new VipCardDao().selectCashCard(vipID);
 
 								if (vipID_db[0].equals(vipID)){
 									integal_t.setText((String) vipID_db[2]);//如果有vip卡就显示积分
@@ -188,7 +188,7 @@ public class CashView{
 							if (!cashCardID.equals("") && cashCard_t.isEditable()){
 								Object[] cashCard_db = new CashCardDao().selectCashCard(cashCardID);
 								if (cashCard_db.equals(cashCard_db)){
-									money_t.setText((String) cashCard_db[2]);//如果有购物卡就显示余额
+									money_t.setText((String) cashCard_db[4]);//如果有购物卡就显示余额
 								}else{
 									JOptionPane.showMessageDialog(null,"购物卡号不能为空");
 								}
@@ -293,7 +293,7 @@ public class CashView{
 							return;
 						}
 						CashDao cashDao = new CashDao();
-						CardDao cardDao = new CardDao();
+						VipCardDao cardDao = new VipCardDao();
 						try{
 							cashDao.insertCard(ID,vipID,productID_t.getText(),String.valueOf(productNum_t.getText()),String.valueOf(allMoney),String.valueOf(discount),cashID);
 							String integal = integal_t.getText();
@@ -320,7 +320,7 @@ public class CashView{
 
 						}
 						CashDao cashDao = new CashDao();
-						CardDao cardDao = new CardDao();
+						VipCardDao cardDao = new VipCardDao();
 						try{
 							cashDao.insertCard(ID,vipID,productID_t.getText(),String.valueOf(productNum_t.getText()),String.valueOf(allMoney),String.valueOf(discount),cashID);
 							String integal = integal_t.getText();
@@ -344,7 +344,7 @@ public class CashView{
 						double discount = 1.0;  //不打折
 						allMoney *= discount;
 						CashDao cashDao = new CashDao();
-						CardDao cardDao = new CardDao();
+						VipCardDao cardDao = new VipCardDao();
 						if (allMoney>=200){ //如果消费大于200
 							try{
 								String newVipID = JOptionPane.showInputDialog("消费满200办理会员卡","请输入会员卡号");

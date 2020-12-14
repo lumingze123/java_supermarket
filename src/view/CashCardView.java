@@ -13,7 +13,7 @@ public class CashCardView {
     //购物卡管理界面
     public void init() {
         //购物卡窗口
-        JFrame cashcardwindow = new JFrame("CashCardWindow");
+        JFrame cashcardwindow = new JFrame("购物卡管理");
         cashcardwindow.setVisible(true);
         cashcardwindow.setSize(500,400);
         cashcardwindow.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -40,7 +40,7 @@ public class CashCardView {
 
         //显示框
         JTable cashcardtable = new JTable();
-        Object[] columnName = {"购物卡号","会员卡号","金额"};
+        Object[] columnName = {"购物卡号","会员卡号","姓名","积分","金额"};
         DefaultTableModel tableModel = (DefaultTableModel) cashcardtable.getModel();
         for (int i=0;i<columnName.length;i++){
             tableModel.addColumn(columnName[i]);
@@ -110,9 +110,9 @@ public class CashCardView {
                 SwingUtilities.invokeLater(new Runnable() {
                     @Override
                     public void run() {
-
+                        //获取选中的一行
                         String cashcard = (String) cashcardtable.getValueAt(cashcardtable.getSelectedRow(),0);
-                        Double money = Double.parseDouble((String) cashcardtable.getValueAt(cashcardtable.getSelectedRow(),2));
+                        Double money = Double.parseDouble((String) cashcardtable.getValueAt(cashcardtable.getSelectedRow(),4));
 
                         if (!addMoneyStr.equals("")){
                             Double addMoney = Double.parseDouble(addMoneyStr);

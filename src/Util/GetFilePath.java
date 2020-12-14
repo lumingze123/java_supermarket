@@ -10,6 +10,5 @@ public class GetFilePath {
         return currentPath1;
     }
 
-
 }
 
