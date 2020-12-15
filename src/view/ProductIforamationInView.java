@@ -1,6 +1,7 @@
 package view;
 
 import Dao.GoodsDao;
+import Dao.SaleDao;
 
 import javax.swing.*;
 import java.awt.*;
@@ -63,79 +64,67 @@ public class ProductIforamationInView {
         enter.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                SwingUtilities.invokeLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        //提交按钮点击事件
-                        String id_text = id.getText();//id
-                        String name_text = name.getText();//名称
-                        String price_text = price.getText();//价格
-                        String stock_text = stock.getText();//数量
-                        LocalDate date = LocalDate.now();
+            SwingUtilities.invokeLater(new Runnable() {
+                @Override
+                public void run() {
+                    //提交按钮点击事件
+                    String id_text = id.getText();//id
+                    String name_text = name.getText();//名称
+                    Double price_text = Double.valueOf(Integer.valueOf(price.getText()));//价格
+                    Integer stock_text = Integer.valueOf(stock.getText());//数量
+                    LocalDate date = LocalDate.now();
+                    //数据类型转换 date→string
+                    DateTimeFormatter fmt = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+                    String time = date.format(fmt);
 
-                        //数据类型转换 date→string
-                        DateTimeFormatter fmt = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-                        String time = date.format(fmt);
-
-                        if (!id_text.equals("") && !name_text.equals("") && !price_text.equals("") && !stock_text.equals("")){//输入不能为空
-                            GoodsDao good = new GoodsDao();
-                            try {
-                                Object[] selectResult = good.selectProduct(name_text);//通过商品名称判断是否已存在商品
-                                //如果商品存在，更新现有商品信息；如果商品不存在，添加新的商品信息
-                                if (selectResult[0] != null){
-                                    int result = good.updateProduct(name_text,price_text,stock_text,time);
+                    if (!id_text.equals("") && !name_text.equals("") && !price_text.equals("") && !(stock_text==0)){//输入不能为空
+                        GoodsDao good = new GoodsDao();
+                        try {
+                            Object[] selectResult = good.selectProductID(name_text);//通过商品名称判断是否已存在商品
+                            //如果商品存在，更新现有商品信息；如果商品不存在，添加新的商品信息
+                            if (selectResult[0] != null){
+                                int result = good.updateProduct(id_text,price_text,stock_text,time);
+                                System.out.println(result);
+                                if (result != -1){
+                                    JOptionPane.showMessageDialog(null,"商品信息更新成功！");
+                                }else{
+                                    JOptionPane.showMessageDialog(null,"商品信息更新失败！");
+                                }
+                            }else{
+                                selectResult =good.selectProductID(id_text);
+                                if (selectResult[0] != null){ //已经存在相同id
+                                    JOptionPane.showMessageDialog(null,"id重复");
+                                    id.setText("");
+                                }else{
+                                    int result = good.insertProduct(id_text,name_text,price_text,stock_text,time);
                                     System.out.println(result);
                                     if (result != -1){
-                                        JOptionPane.showMessageDialog(null,"商品信息更新成功！");
+                                        JOptionPane.showMessageDialog(null,"已添加新商品信息！");
+                                    }else {
+                                        JOptionPane.showMessageDialog(null,"添加新商品失败！");
                                     }
-                                    else{
-                                        JOptionPane.showMessageDialog(null,"商品信息更新失败！");
-                                    }
-
                                 }
-                                else{
-                                    selectResult =good.selectProductID(id_text);
-                                    if (selectResult[0] != null){ //已经存在相同id
-                                        JOptionPane.showMessageDialog(null,"id重复");
-                                        id.setText("");
-                                    }else{
-                                        int result = good.insertProduct(id_text,name_text,price_text,stock_text,time);
-                                        System.out.println(result);
-                                        if (result != -1){
-                                            JOptionPane.showMessageDialog(null,"已添加新商品信息！");
-                                        }
-                                        else {
-                                            JOptionPane.showMessageDialog(null,"添加新商品失败！");
-                                        }
-                                    }
-
-
-                                }
-
-                            } catch (SQLException ex) {
-                                ex.printStackTrace();
                             }
-
+                        } catch (SQLException ex) {
+                            ex.printStackTrace();
                         }
-                        else {
-                            JOptionPane.showMessageDialog(null,"输入信息不能为空！");
-                        }
-
-
+                    }else {
+                        JOptionPane.showMessageDialog(null,"输入信息不能为空！");
                     }
-                });
+                }
+            });
             }
         });
         cancel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                SwingUtilities.invokeLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        //返回按钮点击事件
-                        produceIforamationFrame.dispose();
-                    }
-                });
+            SwingUtilities.invokeLater(new Runnable() {
+                @Override
+                public void run() {
+                    //返回按钮点击事件
+                    produceIforamationFrame.dispose();
+                }
+            });
             }
         });
     }

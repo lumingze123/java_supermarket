@@ -22,13 +22,12 @@ public class CashCardDao extends Jdbc_Conn {
             pt.setString(1,cashId);
             rs = pt.executeQuery();
             //将查询结果转换为Object数组
-            Object[] result  = new Object[5];
+            Object[] result  = new Object[4];
             while (rs.next()){
                 result[0] = rs.getString("s_card");
                 result[1] = rs.getString("v_card");
                 result[2] = rs.getString("v_name");
-                result[3] = rs.getString("v_integral");
-                result[4] = rs.getString("s_money");
+                result[3] = rs.getDouble("s_money");
             }
             return result;
         } catch (SQLException e) {
@@ -38,12 +37,12 @@ public class CashCardDao extends Jdbc_Conn {
     }
 
     //购物卡充值
-    public int updateMoney(String cashcard,String money) throws SQLException {
+    public int updateMoney(String cashcard,Double money) throws SQLException {
         jdbc();
         try {
             String update_sql = "UPDATE vipcard SET s_money = ? WHERE s_card = ?";
             pt = conn.prepareStatement(update_sql);
-            pt.setString(1,money);
+            pt.setDouble(1,money);
             pt.setString(2,cashcard);
             int result = pt.executeUpdate();
 
@@ -65,7 +64,7 @@ public class CashCardDao extends Jdbc_Conn {
             String insert_sql = "INSERT INTO vipcard (s_card,s_money) VALUES (?,?)";
             pt = conn.prepareStatement(insert_sql);
             pt.setString(1,card);
-            pt.setString(2,"0");
+            pt.setDouble(2,0);
             int result = pt.executeUpdate();
 
             return result;
@@ -81,13 +80,12 @@ public class CashCardDao extends Jdbc_Conn {
     public int insertCashCard(String card,String name,String vipcard) throws SQLException {
         jdbc();
         try {
-            String insert_sql = "INSERT INTO vipcard (s_card,v_card,v_name,v_integral,s_money) VALUES (?,?,?,?,?)";
+            String insert_sql = "INSERT INTO vipcard (s_card,v_card,v_name,s_money) VALUES (?,?,?,?)";
             pt = conn.prepareStatement(insert_sql);
             pt.setString(1,card);
             pt.setString(2,vipcard);
             pt.setString(3,name);
-            pt.setString(4,"0");
-            pt.setString(5,"0");
+            pt.setDouble(4,0);
             int result = pt.executeUpdate();
             return result;
         } catch (SQLException e) {

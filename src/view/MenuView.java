@@ -76,51 +76,51 @@ public class MenuView {
         in.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                SwingUtilities.invokeLater(new Runnable() {
-                    @Override
-                    public void run() {
-                       new ProductIforamationInView().init();
+            SwingUtilities.invokeLater(new Runnable() {
+                @Override
+                public void run() {
+                   new ProductIforamationInView().init();
 
-                    }
-                });
+                }
+            });
             }
         });
         //商品查询
         find.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                SwingUtilities.invokeLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        new ProductSelectView().init();
-                    }
-                });
+            SwingUtilities.invokeLater(new Runnable() {
+                @Override
+                public void run() {
+                    new ProductSelectView().init();
+                }
+            });
             }
         });
         //结账
         cash.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                SwingUtilities.invokeLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        new CashView(ID);
-                    }
-                });
+            SwingUtilities.invokeLater(new Runnable() {
+                @Override
+                public void run() {
+                    new CashView(ID);
+                }
+            });
             }
         });
         //购物卡管理
         cashCard.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                SwingUtilities.invokeLater(new Runnable() {
-                    @Override
-                    public void run() {
+            SwingUtilities.invokeLater(new Runnable() {
+                @Override
+                public void run() {
 //                        menuFrame.setState(Frame.ICONIFIED);
-                        new CashCardView().init();
+                    new CashCardView().init();
 
-                    }
-                });
+                }
+            });
             }
         });
 

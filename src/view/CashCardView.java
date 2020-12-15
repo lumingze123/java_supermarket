@@ -40,7 +40,7 @@ public class CashCardView {
 
         //显示框
         JTable cashcardtable = new JTable();
-        Object[] columnName = {"购物卡号","会员卡号","姓名","积分","金额"};
+        Object[] columnName = {"购物卡号","会员卡号","姓名","金额"};
         DefaultTableModel tableModel = (DefaultTableModel) cashcardtable.getModel();
         for (int i=0;i<columnName.length;i++){
             tableModel.addColumn(columnName[i]);
@@ -70,72 +70,65 @@ public class CashCardView {
         //查询按钮事件
         cashcardinquirebutton.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
-                SwingUtilities.invokeLater(new Runnable() {
-                    @Override
-                    public void run() {
+            SwingUtilities.invokeLater(new Runnable() {
+                @Override
+                public void run() {
+                    if(tableModel.getRowCount() == 1)
+                        tableModel.removeRow(tableModel.getRowCount() - 1);
 
-                        if(tableModel.getRowCount() == 1)
-                            tableModel.removeRow(tableModel.getRowCount() - 1);
-
-                        String cashid = cashcardIDtextfield.getText();
-                        if (!cashid.equals("")){
-                            CashCardDao cc = new CashCardDao();
-                            try {
-                                Object[] obj = cc.selectCashCard(cashid);
-                                if (obj[0] != null){
-                                    tableModel.addRow(obj);
-                                }
-                                else{
-                                    JOptionPane.showMessageDialog(null,"该账户不存在！");
-                                }
-                            } catch (SQLException ex) {
-                                ex.printStackTrace();
+                    String cashid = cashcardIDtextfield.getText();
+                    if (!cashid.equals("")){
+                        CashCardDao cc = new CashCardDao();
+                        try {
+                            Object[] obj = cc.selectCashCard(cashid);
+                            if (obj[0] != null){
+                                tableModel.addRow(obj);
+                            }else{
+                                JOptionPane.showMessageDialog(null,"该账户不存在！");
                             }
-                            System.out.println("111");
-
+                        } catch (SQLException ex) {
+                            ex.printStackTrace();
                         }
-                        else{
-                            JOptionPane.showMessageDialog(null,"输入卡号不能为空！");
-                        }
+                        System.out.println("111");
+                    }else{
+                        JOptionPane.showMessageDialog(null,"输入卡号不能为空！");
                     }
-                });
+                }
+            });
             }
         });
         //充值按钮事件
         cashcardrechargebutton.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
-                //获取充值金额
-                String addMoneyStr = JOptionPane.showInputDialog("请输入要充值的金额");
+            //获取充值金额
+            String addMoneyStr = JOptionPane.showInputDialog("请输入要充值的金额");
 
-                SwingUtilities.invokeLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        //获取选中的一行
-                        String cashcard = (String) cashcardtable.getValueAt(cashcardtable.getSelectedRow(),0);
-                        Double money = Double.parseDouble((String) cashcardtable.getValueAt(cashcardtable.getSelectedRow(),4));
+            SwingUtilities.invokeLater(new Runnable() {
+                @Override
+                public void run() {
+                    //获取选中的一行
+                    String cashcard = (String) cashcardtable.getValueAt(cashcardtable.getSelectedRow(),0);
+                    Double money = (Double) cashcardtable.getValueAt(cashcardtable.getSelectedRow(),3);
 
-                        if (!addMoneyStr.equals("")){
-                            Double addMoney = Double.parseDouble(addMoneyStr);
-                            CashCardDao cc = new CashCardDao();
-                            try {
-                                int result = cc.updateMoney(cashcard,String.valueOf(money += addMoney));
-                                System.out.println(result);
-                                if (result != -1){
-                                    JOptionPane.showMessageDialog(null,"充值成功！");
-                                }
-                                else{
-                                    JOptionPane.showMessageDialog(null,"充值失败！");
-                                }
-
-                            } catch (SQLException ex) {
-                                ex.printStackTrace();
+                    if (!addMoneyStr.equals("")){
+                        Double addMoney = Double.parseDouble(addMoneyStr);
+                        CashCardDao cc = new CashCardDao();
+                        try {
+                            int result = cc.updateMoney(cashcard,money += addMoney);
+                            System.out.println(result);
+                            if (result != -1){
+                                JOptionPane.showMessageDialog(null,"充值成功！");
+                            }else{
+                                JOptionPane.showMessageDialog(null,"充值失败！");
                             }
+                        } catch (SQLException ex) {
+                            ex.printStackTrace();
                         }
-                        else{
-                            JOptionPane.showMessageDialog(null,"输入金额不能为空！");
-                        }
+                    }else{
+                        JOptionPane.showMessageDialog(null,"输入金额不能为空！");
                     }
-                });
+                }
+            });
             }
         });
 

@@ -1,5 +1,6 @@
 package view;
 
+import Dao.SaleDao;
 import Dao.UserDao;
 
 import javax.swing.*;
@@ -11,7 +12,6 @@ import java.sql.SQLException;
 public class RegisterView {
     //注册页面
     public void init(){
-//        frame.dispose();
         //定义控件
         JFrame registerFrame = new JFrame("收银员账号注册");
         JLabel message = new JLabel("请输入信息...");
@@ -56,53 +56,50 @@ public class RegisterView {
         enter.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                SwingUtilities.invokeLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        String no = no_t.getText();
-                        String name = name_t.getText();
-                        String pwd = String.valueOf(passward.getPassword());
-                        System.out.println(no);
-                        System.out.println(name);
-                        System.out.println(pwd);
-                        System.out.println(name.equals(""));
-                        if (!(name.equals("") && pwd.equals(""))){
-                            UserDao user = new UserDao();
-                            try {
-                                int res = user.insertUser(no,name,pwd);
-                                if (res>0){
-                                    JOptionPane.showMessageDialog(null,"新建账户成功！");
-                                }
-                                else{
-                                    JOptionPane.showMessageDialog(null,"新建账户失败！");
-                                }
-                            }
-                            catch (SQLException ex) {
-                                ex.printStackTrace();
+            SwingUtilities.invokeLater(new Runnable() {
+                @Override
+                public void run() {
+                    String no = no_t.getText();
+                    String name = name_t.getText();
+                    String pwd = String.valueOf(passward.getPassword());
+                    System.out.println(no);
+                    System.out.println(name);
+                    System.out.println(pwd);
+                    System.out.println(name.equals(""));
+                    if (!(name.equals("") && pwd.equals(""))){
+                        UserDao user = new UserDao();
+                        try {
+                            int res = user.insertUser(no,name,pwd);
+                            if (res>0){
+                                JOptionPane.showMessageDialog(null,"新建账户成功！");
+                                new LoginView();
+                                registerFrame.dispose();
+                            }else{
+                                JOptionPane.showMessageDialog(null,"新建账户失败！");
                             }
                         }
-                        else {
-                            JOptionPane.showMessageDialog(null,"账号或密码不能为空！");
+                        catch (SQLException ex) {
+                            ex.printStackTrace();
                         }
+                    }else {
+                        JOptionPane.showMessageDialog(null,"账号或密码不能为空！");
                     }
-                });
+                }
+            });
             }
         });
 
         cancel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                SwingUtilities.invokeLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        new LoginView();
-                        registerFrame.dispose();
-                    }
-                });
+            SwingUtilities.invokeLater(new Runnable() {
+                @Override
+                public void run() {
+                    new LoginView();
+                    registerFrame.dispose();
+                }
+            });
             }
         });
-
-
     }
-
 }

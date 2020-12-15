@@ -46,41 +46,33 @@ public class ProductSelectView {
         productFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         productFrame.setVisible(true);
         productFrame.setLocation(550,300);
-//        id.addKeyListener(new KeyAdapter() {
-//            @Override
-//            public void keyPressed(KeyEvent e) {
-//                if (e.getKeyCode()==KeyEvent.VK_ENTER) {
-//                    //回车查询
-//                }
-//            }
-//        });
+
         select.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                SwingUtilities.invokeLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        //点击查询
-                        String name = id.getText();
-                        GoodsDao goodsDao = new GoodsDao();
-                        try {
-                            Object[] data= goodsDao.selectProduct(name);
-                            if (data[0] !=null){
-                                //将返回的结果添加到显示表
-                                tableModel.addRow(data);
-                            }
-                            else{
-                                JOptionPane.showMessageDialog(null,"该商品不存在！");
-                            }
+            SwingUtilities.invokeLater(new Runnable() {
+                @Override
+                public void run() {
+                    if(tableModel.getRowCount() == 1)
+                        tableModel.removeRow(tableModel.getRowCount() - 1);
+                    //点击查询
+                    String name = id.getText();
+                    GoodsDao goodsDao = new GoodsDao();
 
-
-                        } catch (SQLException ex) {
-                            ex.printStackTrace();
+                    try {
+                        Object[] data= goodsDao.selectProductID(name);
+                        if (data[0] !=null){
+                            //将返回的结果添加到显示表
+                            tableModel.addRow(data);
+                        }else{
+                            JOptionPane.showMessageDialog(null,"该商品不存在！");
                         }
+                    } catch (SQLException ex) {
+                        ex.printStackTrace();
                     }
-                });
+                }
+            });
             }
         });
     }
-
 }

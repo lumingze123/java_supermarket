@@ -916,61 +916,61 @@ SELECT|sys.sys_config
       <Position>2</Position>
       <DataType>varchar(20)|0s</DataType>
     </column>
-    <column id="289" parent="283" name="p_id">
+    <column id="289" parent="283" name="b_money">
       <Position>3</Position>
-      <DataType>varchar(20)|0s</DataType>
+      <DataType>double|0s</DataType>
     </column>
-    <column id="290" parent="283" name="p_num">
+    <column id="290" parent="283" name="b_discount">
       <Position>4</Position>
-      <DataType>varchar(20)|0s</DataType>
+      <DataType>double|0s</DataType>
     </column>
-    <column id="291" parent="283" name="b_money">
+    <column id="291" parent="283" name="s_card">
       <Position>5</Position>
       <DataType>varchar(20)|0s</DataType>
     </column>
-    <column id="292" parent="283" name="b_discount">
+    <column id="292" parent="283" name="b_time">
       <Position>6</Position>
-      <DataType>varchar(20)|0s</DataType>
-    </column>
-    <column id="293" parent="283" name="s_card">
-      <Position>7</Position>
-      <DataType>varchar(20)|0s</DataType>
-    </column>
-    <column id="294" parent="283" name="b_time">
-      <Position>8</Position>
       <DataType>varchar(30)|0s</DataType>
     </column>
-    <column id="295" parent="284" name="p_id">
+    <column id="293" parent="284" name="p_id">
       <Position>1</Position>
       <DataType>varchar(20)|0s</DataType>
     </column>
-    <column id="296" parent="284" name="p_name">
+    <column id="294" parent="284" name="p_name">
       <Position>2</Position>
       <DataType>varchar(20)|0s</DataType>
     </column>
-    <column id="297" parent="284" name="p_price">
+    <column id="295" parent="284" name="p_price">
       <Position>3</Position>
-      <DataType>varchar(20)|0s</DataType>
+      <DataType>double|0s</DataType>
     </column>
-    <column id="298" parent="284" name="p_stock">
+    <column id="296" parent="284" name="p_stock">
       <Position>4</Position>
-      <DataType>varchar(20)|0s</DataType>
+      <DataType>int|0s</DataType>
     </column>
-    <column id="299" parent="284" name="p_gettime">
+    <column id="297" parent="284" name="p_gettime">
       <Position>5</Position>
       <DataType>varchar(20)|0s</DataType>
     </column>
-    <column id="300" parent="285" name="u_id">
+    <column id="298" parent="284" name="p_sale">
+      <Position>6</Position>
+      <DataType>int|0s</DataType>
+    </column>
+    <column id="299" parent="285" name="u_id">
       <Position>1</Position>
       <DataType>varchar(20)|0s</DataType>
     </column>
-    <column id="301" parent="285" name="u_name">
+    <column id="300" parent="285" name="u_name">
       <Position>2</Position>
       <DataType>varchar(20)|0s</DataType>
     </column>
-    <column id="302" parent="285" name="u_password">
+    <column id="301" parent="285" name="u_password">
       <Position>3</Position>
       <DataType>varchar(20)|0s</DataType>
+    </column>
+    <column id="302" parent="285" name="u_sale">
+      <Position>4</Position>
+      <DataType>double|0s</DataType>
     </column>
     <column id="303" parent="286" name="s_card">
       <Position>1</Position>
@@ -984,13 +984,9 @@ SELECT|sys.sys_config
       <Position>3</Position>
       <DataType>varchar(20)|0s</DataType>
     </column>
-    <column id="306" parent="286" name="v_integral">
+    <column id="306" parent="286" name="s_money">
       <Position>4</Position>
-      <DataType>varchar(20)|0s</DataType>
-    </column>
-    <column id="307" parent="286" name="s_money">
-      <Position>5</Position>
-      <DataType>varchar(20)|0s</DataType>
+      <DataType>double|0s</DataType>
     </column>
   </database-model>
 </dataSource>

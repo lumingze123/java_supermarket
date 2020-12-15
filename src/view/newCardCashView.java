@@ -72,25 +72,25 @@ public class newCardCashView {
         isVip_y.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                SwingUtilities.invokeLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        name_t.setEditable(true);
-                        vipCard_t.setEditable(true);
-                    }
-                });
+            SwingUtilities.invokeLater(new Runnable() {
+                @Override
+                public void run() {
+                    name_t.setEditable(true);
+                    vipCard_t.setEditable(true);
+                }
+            });
             }
         });
         isVip_n.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                SwingUtilities.invokeLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        name_t.setEditable(false);
-                        vipCard_t.setEditable(false);
-                    }
-                });
+            SwingUtilities.invokeLater(new Runnable() {
+                @Override
+                public void run() {
+                    name_t.setEditable(false);
+                    vipCard_t.setEditable(false);
+                }
+            });
             }
         });
 
@@ -98,76 +98,65 @@ public class newCardCashView {
         enter.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                SwingUtilities.invokeLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        String card = card_t.getText();
-                        CashCardDao cc = new CashCardDao();
-                        VipCardDao vc = new VipCardDao();
-                        try {
-                            Object[] c_result = cc.selectCashCard(card);
-                            if (c_result[0] != null){
-                                JOptionPane.showMessageDialog(null,"已经存在该购物卡！");
-                            }else {
-                                if (!card.equals("")){
+            SwingUtilities.invokeLater(new Runnable() {
+                @Override
+                public void run() {
+                    String card = card_t.getText();
+                    CashCardDao cc = new CashCardDao();
+                    VipCardDao vc = new VipCardDao();
+                    try {
+                        Object[] c_result = cc.selectCashCard(card);
+                        if (c_result[0] != null){
+                            JOptionPane.showMessageDialog(null,"已经存在该购物卡！");
+                        }else {
+                            if (!card.equals("")){
 
-                                    if (vipCard_t.isEditable()){
-                                        String name = name_t.getText();
-                                        String vipcard = vipCard_t.getText();
-                                        try {
-                                            //判断会员输入是否正确，正确即注册新购物卡
-                                            Object[] vip_result = vc.selectCashCard(vipcard,name);
-                                            if (vip_result[0] != null){
-                                                JOptionPane.showMessageDialog(null,"该号已有会员卡");
-                                            }else{
-                                                if(!name.equals("")&&!vipcard.equals("")){
-                                                    int result = cc.insertCashCard(card,name,vipcard);
-                                                    if (result > 0){
-                                                        JOptionPane.showMessageDialog(null,"注册购物卡成功！");
-                                                    }
-                                                    else {
-                                                        JOptionPane.showMessageDialog(null,"注册购物卡失败！");
-                                                    }
+                                if (vipCard_t.isEditable()){
+                                    String name = name_t.getText();
+                                    String vipcard = vipCard_t.getText();
+                                    try {
+                                        //判断会员输入是否正确，正确即注册新购物卡
+                                        Object[] vip_result = vc.selectCashCard(vipcard,name);
+                                        if (vip_result[0] != null){
+                                            JOptionPane.showMessageDialog(null,"该号已有会员卡");
+                                        }else{
+                                            if(!name.equals("")&&!vipcard.equals("")){
+                                                int result = cc.insertCashCard(card,name,vipcard);
+                                                if (result > 0){
+                                                    JOptionPane.showMessageDialog(null,"注册购物卡成功！");
                                                 }else {
-                                                    JOptionPane.showMessageDialog(null,"姓名或会员卡号不能为空");
-                                                };
-
-                                            }
-                                        } catch (SQLException ex) {
-                                            ex.printStackTrace();
+                                                    JOptionPane.showMessageDialog(null,"注册购物卡失败！");
+                                                }
+                                            }else {
+                                                JOptionPane.showMessageDialog(null,"姓名或会员卡号不能为空");
+                                            };
                                         }
-                                    }else{
-                                        try {
-                                            //注册没有会员卡的购物卡
-                                            int result = cc.insertCashCard(card);
-                                            if (result > 0){
-                                                JOptionPane.showMessageDialog(null,"注册购物卡成功！");
-                                            }
-                                            else {
-                                                JOptionPane.showMessageDialog(null,"注册购物卡失败！");
-                                            }
-
-                                        } catch (SQLException ex) {
-                                            ex.printStackTrace();
-                                        }
-
+                                    } catch (SQLException ex) {
+                                        ex.printStackTrace();
                                     }
-
+                                }else{
+                                    try {
+                                        //注册没有会员卡的购物卡
+                                        int result = cc.insertCashCard(card);
+                                        if (result > 0){
+                                            JOptionPane.showMessageDialog(null,"注册购物卡成功！");
+                                        }else {
+                                            JOptionPane.showMessageDialog(null,"注册购物卡失败！");
+                                        }
+                                    } catch (SQLException ex) {
+                                        ex.printStackTrace();
+                                    }
                                 }
-                                else {
-                                    JOptionPane.showMessageDialog(null,"卡号不能为空！");
-                                }
+                            }else {
+                                JOptionPane.showMessageDialog(null,"卡号不能为空！");
                             }
-                        } catch (SQLException throwables) {
-                            throwables.printStackTrace();
                         }
-
+                    } catch (SQLException throwables) {
+                        throwables.printStackTrace();
                     }
-                });
+                }
+            });
             }
         });
     }
-
-
-
 }

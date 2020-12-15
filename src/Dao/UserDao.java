@@ -73,11 +73,12 @@ public class UserDao extends Jdbc_Conn{
 
         jdbc();
         try {
-            String insert_sql = "INSERT INTO user (u_id,u_name,u_password) VALUES (?,?,?)";
+            String insert_sql = "INSERT INTO user (u_id,u_name,u_password,u_sale) VALUES (?,?,?,?)";
             pt = conn.prepareStatement(insert_sql);
             pt.setString(1,no);
             pt.setString(2,name);
             pt.setString(3,pwd);
+            pt.setDouble(4,0);
             int res = pt.executeUpdate();
 
             System.out.println(res);

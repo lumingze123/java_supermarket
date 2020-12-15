@@ -1,9 +1,6 @@
 package view;
 
-import Dao.VipCardDao;
-import Dao.CashCardDao;
-import Dao.CashDao;
-import Dao.GoodsDao;
+import Dao.*;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -22,43 +19,9 @@ public class CashView{
 		cashFrame.setLocation(0,0);
 		cashFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		cashFrame.setLayout(new BorderLayout());
-		//cashFrame.setResizable(false);//禁止改变界面大小
+		cashFrame.setResizable(false);//禁止改变界面大小
 		//查询面板===============================
 		JPanel top=new JPanel();
-		JLabel vipID=new JLabel("会员卡ID:");
-		JTextField vipCard_t = new JTextField(10);
-		vipCard_t.setEditable(false);
-		JRadioButton isVip_y =new JRadioButton("是");
-		JRadioButton isVip_n = new JRadioButton("否");
-		ButtonGroup bg = new ButtonGroup();
-		bg.add(isVip_n);
-		bg.add(isVip_y);
-		//添加单选按钮的点击事件
-		isVip_y.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				SwingUtilities.invokeLater(new Runnable() {
-					@Override
-					public void run() {
-						vipCard_t.setEditable(true);
-					}
-				});
-			}
-		});
-		isVip_n.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				SwingUtilities.invokeLater(new Runnable() {
-					@Override
-					public void run() {
-						vipCard_t.setEditable(false);
-						vipCard_t.setText("");
-					}
-				});
-			}
-		});
-
-
 		JLabel cashCard_l = new JLabel("购物卡:");
 		JTextField cashCard_t = new JTextField(10);
 		cashCard_t.setEditable(false);
@@ -72,30 +35,27 @@ public class CashView{
 		iscashCard_y.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				SwingUtilities.invokeLater(new Runnable() {
-					@Override
-					public void run() {
-						cashCard_t.setEditable(true);
-					}
-				});
+			SwingUtilities.invokeLater(new Runnable() {
+				@Override
+				public void run() {
+					cashCard_t.setEditable(true);
+				}
+			});
 			}
 		});
 		iscashCard_n.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				SwingUtilities.invokeLater(new Runnable() {
-					@Override
-					public void run() {
-						cashCard_t.setEditable(false);
-						cashCard_t.setText("");
-					}
-				});
+			SwingUtilities.invokeLater(new Runnable() {
+				@Override
+				public void run() {
+					cashCard_t.setEditable(false);
+					cashCard_t.setText("");
+				}
+			});
 			}
 		});
 
-		JLabel integal_l=new JLabel("积分:");
-		JTextField integal_t=new JTextField(5);//用来输出积分的输入框
-		integal_t.setEditable(false);
 		JLabel money_l = new JLabel("余额");
 		JTextField money_t = new JTextField(5);
 		money_t.setEditable(false);
@@ -107,18 +67,11 @@ public class CashView{
 		JButton add=new JButton("添加");
 		JButton del=new JButton("取消");
 
-
 		//从上到下→从左到右
-		top.add(vipID);
-		top.add(vipCard_t);
-		top.add(isVip_y);
-		top.add(isVip_n);
 		top.add(cashCard_l);
 		top.add(cashCard_t);
 		top.add(iscashCard_y);
 		top.add(iscashCard_n);
-		top.add(integal_l);
-		top.add(integal_t);
 		top.add(money_l);
 		top.add(money_t);
 		top.add(find);
@@ -134,7 +87,7 @@ public class CashView{
 
 		//显示面板========================================
 		JTable productTable = new JTable();
-		Object[] columnName = {"ID","名称","单价","数量","小计"};
+		Object[] columnName = {"ID","名称","单价","数量","小计","折后价"};
 
 		DefaultTableModel tableModel = (DefaultTableModel) productTable.getModel();
 
@@ -168,83 +121,80 @@ public class CashView{
 		find.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				SwingUtilities.invokeLater(new Runnable() {
-					@Override
-					public void run() {
-						String vipID = vipCard_t.getText();
-						String cashCardID = cashCard_t.getText();
-						try {
-							if (!vipID.equals("") && vipCard_t.isEditable()){
-								Object[] vipID_db = new VipCardDao().selectCashCard(vipID);
-
-								if (vipID_db[0].equals(vipID)){
-									integal_t.setText((String) vipID_db[2]);//如果有vip卡就显示积分
-								}else {
-									JOptionPane.showMessageDialog(null,"会员卡号不能为空");
-								}
-							}else {
-								integal_t.setText("");
+			SwingUtilities.invokeLater(new Runnable() {
+				@Override
+				public void run() {
+					String cashCardID = cashCard_t.getText();
+					try {
+						if (cashCard_t.isEditable()){
+							Object[] cashCard_db = new CashCardDao().selectCashCard(cashCardID);
+							if (cashCard_db.equals(cashCard_db)){
+								money_t.setText(cashCard_db[3].toString());//如果有购物卡就显示余额
+							}else{
+								JOptionPane.showMessageDialog(null,"购物卡号不能为空");
 							}
-							if (!cashCardID.equals("") && cashCard_t.isEditable()){
-								Object[] cashCard_db = new CashCardDao().selectCashCard(cashCardID);
-								if (cashCard_db.equals(cashCard_db)){
-									money_t.setText((String) cashCard_db[4]);//如果有购物卡就显示余额
-								}else{
-									JOptionPane.showMessageDialog(null,"购物卡号不能为空");
-								}
-							}else {
-								money_t.setText("");
-							}
-						} catch (SQLException ex) {
-							ex.printStackTrace();
+						}else {
+							money_t.setText("");
 						}
+					} catch (SQLException ex) {
+						ex.printStackTrace();
 					}
-				});
+				}
+			});
 			}
 		});
 		//添加商品监听
 		add.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				SwingUtilities.invokeLater(new Runnable() {
-					@Override
-					public void run() {
-						String productID = productID_t.getText();//商品id
-						String productNum = productNum_t.getText();//商品数量
-						if (!productID.equals("")&&!productNum.equals("")&&Integer.parseInt(productNum)!=0){//不为空且数量不为0
-							Object[] product_db = new Object[5];
-							try {
-								product_db = new GoodsDao().selectProductID(productID);
-							} catch (SQLException ex) {
-								ex.printStackTrace();
-							}
-
-							if (product_db[0]!=null){
-								if ((Integer.parseInt(product_db[3].toString())-Integer.parseInt(productNum))>=0){
-									//"ID","名称","单价","数量","小计"
-									product_db[3]=productNum; //数量=输入数量
-									int num = Integer.parseInt(productNum);
-									double money =Double.parseDouble(product_db[2].toString());
-									double a_money=num*money;//算出总价
-									product_db[4]=a_money;//小计=数量*单价
-									tableModel.addRow(product_db);//添加到tableModel
-									allMoney += Double.parseDouble(productTable.getValueAt(productTable.getRowCount()-1,4).toString());
-									all_money_t.setText(String.valueOf(allMoney));
-								}else {
-									JOptionPane.showMessageDialog(null,"库存不足！");
-								}
-
-							}else{
-								JOptionPane.showMessageDialog(null,"商品不存在！");
-							}
-
-						}else{
-							JOptionPane.showMessageDialog(null,"商品号和数量不能为空");
+			SwingUtilities.invokeLater(new Runnable() {
+				@Override
+				public void run() {
+					String productID = productID_t.getText();//商品id
+					String productNum = productNum_t.getText();//商品数量
+					if (!productID.equals("")&&!productNum.equals("")&&Integer.parseInt(productNum)!=0){//不为空且数量不为0
+						Object[] product_db = new Object[6];
+						try {
+							product_db = new GoodsDao().selectProductID(productID);
+						} catch (SQLException ex) {
+							ex.printStackTrace();
 						}
 
-					}
+						if (product_db[0]!=null){
+							if ((Integer.parseInt(product_db[3].toString())-Integer.parseInt(productNum))>=0){
+								//"ID","名称","单价","数量","小计,“折后价"
+								product_db[3]=productNum; //数量=输入数量
+								int num = Integer.parseInt(productNum);
+								double money =Double.parseDouble(product_db[2].toString());
+								double a_money=num*money;//算出总价
+								product_db[4]=a_money;//小计=数量*单价
+								String cashID = cashCard_t.getText();
+								Object[] objects = new Object[4];
+								try {
+									objects = new CashCardDao().selectCashCard(cashID);//查找购物卡
+									if(!(objects[0]==null) && !(objects[1]==null)){
+										product_db[5]=a_money*0.9;//小计=数量*单价
+									}else{
+										product_db[5]=a_money*1;
+									}
+								} catch (SQLException ex) {
+									ex.printStackTrace();
+								}
 
-				});
+								tableModel.addRow(product_db);//添加到tableModel
+								allMoney += Double.parseDouble(productTable.getValueAt(productTable.getRowCount()-1,5).toString());
+								all_money_t.setText(String.valueOf(allMoney));
+							}else {
+								JOptionPane.showMessageDialog(null,"库存不足！");
+							}
+						}else{
+							JOptionPane.showMessageDialog(null,"商品不存在！");
+						}
+					}else{
+						JOptionPane.showMessageDialog(null,"商品号和数量不能为空");
+					}
+				}
+			});
 			}
 		});
 
@@ -252,7 +202,17 @@ public class CashView{
 		del.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				//super.mouseClicked(e);
+
+				double money=0;
+				if(productTable.getSelectedRow()<=0){
+					JOptionPane.showMessageDialog(null,"请选中要取消的商品！");
+					return;
+				}
+				money = Double.parseDouble(productTable.getValueAt(productTable.getSelectedRow(),5).toString());
+				allMoney -= money;
+				all_money_t.setText(String.valueOf(allMoney));
+				int row = productTable.getSelectedRow();
+				tableModel.removeRow(row);
 			}
 		});
 
@@ -260,162 +220,162 @@ public class CashView{
 		block.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				String mess = "";
-				for (int i = 0;i <= productTable.getRowCount()-1;i++){
-					//mess="物品1 ￥100*1=100.0\n"+...
-					mess += productTable.getValueAt(i,1).toString() + " ￥" + productTable.getValueAt(i,2).toString() + "*" + productTable.getValueAt(i,3).toString() + "="+productTable.getValueAt(i,4).toString()+"\n";
+			if (allMoney == 0){
+				JOptionPane.showMessageDialog(null,"请您继续选购商品！");
+				return;
+			};
 
+			String mess = "";
+			for (int i = 0;i <= productTable.getRowCount()-1;i++){
+				//mess="物品1 ￥100*1=100.0\n"+...
+				mess += productTable.getValueAt(i,1).toString() + " ￥" + productTable.getValueAt(i,2).toString() + "*" + productTable.getValueAt(i,3).toString() + "="+productTable.getValueAt(i,5).toString()+"\n";
+			}
+			mess +="实际消费:"+allMoney+"\n是否确认结账";
+			int enter = JOptionPane.showConfirmDialog(null,mess);//弹窗显示
+			if (enter==0) {//是
+				String cashID = cashCard_t.getText();
+				Object[] objects = new Object[4];
+				try {
+					objects = new CashCardDao().selectCashCard(cashID);//查找购物卡
+				} catch (SQLException ex) {
+					ex.printStackTrace();
 				}
-				mess +="是否确认结账";
-				int enter = JOptionPane.showConfirmDialog(null,mess);//弹窗显示
-				if (enter==0){//是
-					String vipID  = vipCard_t.getText();
-					String cashID = cashCard_t.getText();
-					Object[] objects = new Object[3];
-					try {
-						objects = new CashCardDao().selectCashCard(cashID);//查找购物卡
-					} catch (SQLException ex) {
-						ex.printStackTrace();
-					}
-					//算总价钱还有判断是否办会员卡
-					if(objects[1] != null && objects[0] != null){ //有购物卡且是会员
-						double discount = 0.9;
-						allMoney*=discount;//打九折
-						if (Double.parseDouble(objects[2].toString())>=allMoney){
-							double cardMoney = Double.parseDouble(objects[2].toString())-allMoney;//购物卡减去价钱
-							try {
-								new CashCardDao().updateMoney(cashID,String.valueOf(cardMoney));
-							} catch (SQLException ex) {
-								ex.printStackTrace();
-							}
-						}else {
-							JOptionPane.showMessageDialog(null,"余额不足");
-							return;
-						}
-						CashDao cashDao = new CashDao();
-						VipCardDao cardDao = new VipCardDao();
-						try{
-							cashDao.insertCard(ID,vipID,productID_t.getText(),String.valueOf(productNum_t.getText()),String.valueOf(allMoney),String.valueOf(discount),cashID);
-							String integal = integal_t.getText();
-							integal = integal+(int)allMoney;
-							cardDao.updateIntegral(String.valueOf(objects[1]),integal);
-						}catch (SQLException ex){
-							ex.printStackTrace();
-						}
-
-					}else if(objects[0] != null && vipID.equals("")){ //有购物卡，不是会员
-						System.out.println("222");
-						double discount = 1.0;
-						allMoney*=discount;
-						if (Double.parseDouble(objects[2].toString())>=allMoney){
-							double cardMoney = Double.parseDouble(objects[2].toString())-allMoney;//购物卡减去价钱
-							try {
-								new CashCardDao().updateMoney(cashID,String.valueOf(cardMoney));
-							} catch (SQLException ex) {
-								ex.printStackTrace();
-							}
-						}else {
-							JOptionPane.showMessageDialog(null,"余额不足");
-							return;
-
-						}
-						CashDao cashDao = new CashDao();
-						VipCardDao cardDao = new VipCardDao();
-						try{
-							cashDao.insertCard(ID,vipID,productID_t.getText(),String.valueOf(productNum_t.getText()),String.valueOf(allMoney),String.valueOf(discount),cashID);
-							String integal = integal_t.getText();
-							integal = integal+(int)allMoney;
-							cardDao.updateIntegral(String.valueOf(objects[1]),integal);
-						}catch (SQLException ex){
-							ex.printStackTrace();
-						}
-						if (allMoney>=200){
-							try{
-								String newVipID = JOptionPane.showInputDialog("消费满200办理会员卡","请输入会员卡号");
-								String newVipName = JOptionPane.showInputDialog("消费满200办理会员卡","请输入会员姓名");
-								cardDao.insertCashCard(newVipID,newVipName); //新建会员卡
-								cashDao.insertCard(ID,null,productID_t.getText(),String.valueOf(productNum_t.getText()),String.valueOf(allMoney),String.valueOf(discount),cashID);
-							}catch (SQLException ex){
-								ex.printStackTrace();
-							}
-						}
-					}else {  //没卡没会员
-						System.out.println("333");
-						double discount = 1.0;  //不打折
-						allMoney *= discount;
-						CashDao cashDao = new CashDao();
-						VipCardDao cardDao = new VipCardDao();
-						if (allMoney>=200){ //如果消费大于200
-							try{
-								String newVipID = JOptionPane.showInputDialog("消费满200办理会员卡","请输入会员卡号");
-								String newVipName = JOptionPane.showInputDialog("消费满200办理会员卡","请输入会员姓名");
-								if (!newVipID.equals("")&&!newVipName.equals("")){ //输入不为空
-									int insertResult = cardDao.insertCashCard(newVipID, newVipName);
-									if (insertResult == 1) {
-										JOptionPane.showMessageDialog(null, "会员卡办理成功！");
-									} else {
-										JOptionPane.showMessageDialog(null, "会员卡办理失败！");
-									}
-									//添加账单记录
-									cashDao.insertCard(ID, newVipID, productID_t.getText(), String.valueOf(productNum_t.getText()), String.valueOf(allMoney), String.valueOf(discount), null);
-									String integal = integal_t.getText();
-									integal = integal+(int)allMoney;
-									cardDao.updateIntegral(String.valueOf(objects[1]),integal);
-								}else {//输入为空
-									JOptionPane.showMessageDialog(null, "会员卡办理失败！");
-								}
-							}catch (SQLException ex){
-								ex.printStackTrace();
-							}
-						}
-					}
-					//库存更新
-					for (int i = 0;i <= productTable.getRowCount()-1;i++) {
-						String name = (String) tableModel.getValueAt(i, 1);
-						String id = (String) tableModel.getValueAt(i, 0);
-						String stock = (String) tableModel.getValueAt(i, 3);
-						GoodsDao goodsDao = new GoodsDao();
+				//算总价钱还有判断是否办会员卡
+				if (!(objects[0] == null) && !(objects[1] == null)) { //有购物卡且是会员
+					System.out.println("111");
+					double discount = 0.9;
+					if (Double.parseDouble(objects[3].toString()) >= allMoney) {
+						double cardMoney = Double.parseDouble(objects[3].toString()) - allMoney;//购物卡减去价钱
 						try {
-							Object[] obi = goodsDao.selectProduct(name);
-							int newStock = Integer.parseInt(obi[3].toString()) - Integer.parseInt(stock);
-							System.out.println(newStock);
-							if (newStock > 0) {
-								goodsDao.updateProduct(id, String.valueOf(newStock));
-							} else {
-
-							}
-
+							new CashCardDao().updateMoney(cashID, cardMoney);
 						} catch (SQLException ex) {
 							ex.printStackTrace();
 						}
-						JOptionPane.showMessageDialog(null, "结算成功！");
-						for (int r = 0; r < tableModel.getRowCount(); i++) {
-							tableModel.removeRow(r);
-						}
+					} else {
+						JOptionPane.showMessageDialog(null, "余额不足");
+						return;
 					}
-				}else if (enter==1){//否
-					JOptionPane.showMessageDialog(null,"请您继续选购商品！");
-				}else {//取消
-					JOptionPane.showMessageDialog(null,"已取消本次购物！");
-					for (int i = 0;i <= productTable.getRowCount()-1;i++) {
-						for (int r = 0; r < tableModel.getRowCount(); i++) {
-							tableModel.removeRow(r);
-						}
+					CashDao cashDao = new CashDao();
+					VipCardDao cardDao = new VipCardDao();
+					try {
+						cashDao.insertCard(ID, objects[1].toString(), allMoney, discount, cashID);
+					} catch (SQLException ex) {
+						ex.printStackTrace();
 					}
 
+				} else if (!(objects[0] == null) && (objects[1] == null)) { //有购物卡，不是会员
+					System.out.println("222");
+					double discount = 1;
+					if (Double.parseDouble(objects[3].toString()) >= allMoney) {
+						double cardMoney = Double.parseDouble(objects[3].toString()) - allMoney;//购物卡减去价钱
+						try {
+							new CashCardDao().updateMoney(cashID, cardMoney);
+						} catch (SQLException ex) {
+							ex.printStackTrace();
+						}
+					} else {
+						JOptionPane.showMessageDialog(null, "余额不足");
+						return;
+
+					}
+					CashDao cashDao = new CashDao();
+					VipCardDao cardDao = new VipCardDao();
+					if (allMoney >= 200) { //如果消费大于200
+						try {
+							String newVipName = JOptionPane.showInputDialog("消费满200办理会员卡\n请输入会员姓名", "");
+							if (!newVipName.equals("")) { //输入不为空
+								int insertResult = cardDao.updatevipCard(cashID, newVipName);
+								if (insertResult == 1) {
+									JOptionPane.showMessageDialog(null, "会员卡办理成功！");
+								} else {
+									JOptionPane.showMessageDialog(null, "会员卡办理失败！");
+								}
+								//添加账单记录
+								cashDao.insertCard(ID, cashID, allMoney, discount, cashID);
+							} else {//输入为空
+								JOptionPane.showMessageDialog(null, "输入为空，会员卡办理失败！");
+							}
+						} catch (SQLException ex) {
+							ex.printStackTrace();
+						}
+					}
+				} else {  //没卡没会员
+					System.out.println("333");
+					CashDao cashDao = new CashDao();
+					CashCardDao cardDao = new CashCardDao();
+					double discount = 1;
+					if (allMoney >= 200) { //如果消费大于200
+						try {
+							String newVipID = JOptionPane.showInputDialog("消费满200办理会员卡\n请输入会员卡号", "");
+							String newVipName = JOptionPane.showInputDialog("消费满200办理会员卡\n请输入会员姓名", "");
+							if (!newVipID.equals("") && !newVipName.equals("")) { //输入不为空
+								int insertResult = cardDao.insertCashCard(newVipID,newVipName,newVipID);
+								if (insertResult == 1) {
+									JOptionPane.showMessageDialog(null, "会员卡办理成功！");
+								} else {
+									JOptionPane.showMessageDialog(null, "会员卡办理失败！");
+								}
+								//添加账单记录
+								cashDao.insertCard(ID, newVipID, allMoney, discount, newVipID);
+							} else {//输入为空
+								JOptionPane.showMessageDialog(null, "输入为空，会员卡办理失败！");
+							}
+						} catch (SQLException ex) {
+							ex.printStackTrace();
+						}
+					}
+				}
+				//库存更新
+				GoodsDao goodsDao = new GoodsDao();
+				SaleDao saleDao = new SaleDao();
+				try {
+
+					Double u_s = 0.0;
+					for (int i = 0; i <= productTable.getRowCount() - 1; i++) {
+						String id = (String) tableModel.getValueAt(i, 0);
+						String name = (String) tableModel.getValueAt(i, 1);
+						String stock = (String) tableModel.getValueAt(i, 3);
+						Double qian = (Double) tableModel.getValueAt(i, 5);
+						Object[] u_sale = saleDao.selectusale(ID);
+						Object[] obi = goodsDao.selectProductID(name);
+						u_s = Double.parseDouble(u_sale[1].toString()) + qian;
+						System.out.println("销售额："+u_s);
+						saleDao.updatesale(ID, u_s);
+
+						int newStock = Integer.parseInt(obi[3].toString()) - Integer.parseInt(stock);
+						int sale = Integer.parseInt(obi[5].toString()) + Integer.parseInt(stock);
+						System.out.println(newStock);
+						System.out.println(sale);
+						if (newStock > 0 && sale >= 0) {
+							goodsDao.updateProduct(id, newStock, sale);
+						}
+					}
+				} catch (SQLException ex) {
+					ex.printStackTrace();
 				}
 
+				JOptionPane.showMessageDialog(null, "结算成功！\n实际消费:" + allMoney);
+				for (int r = 0, i = 0; r < tableModel.getRowCount(); i++) {
+					tableModel.removeRow(r);
+				}
+
+				all_money_t.setText("");
+				allMoney = 0;
+
+			}else if (enter==1){//否
+				JOptionPane.showMessageDialog(null,"请您继续选购商品！");
+			}else {//取消
+				JOptionPane.showMessageDialog(null,"已取消本次购物！");
+				for (int i = 0;i <= productTable.getRowCount()-1;i++) {
+					for (int r = 0; r < tableModel.getRowCount(); i++) {
+						tableModel.removeRow(r);
+					}
+				}
+				all_money_t.setText("");
+				allMoney=0;
+			}
 			}
 
 		});
-
-
-
 	}
-
-
-
-
-
-
 }

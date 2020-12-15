@@ -5,6 +5,7 @@ public class GetFilePath {
      * @param str
      * @return
      */
+
     public String getFilePath(String str) {
         String currentPath1 = getClass().getResource(str).getFile();
         return currentPath1;

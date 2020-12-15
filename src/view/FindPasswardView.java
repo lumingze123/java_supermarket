@@ -54,51 +54,52 @@ public class FindPasswardView {
         enter.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                SwingUtilities.invokeLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        String jobnum = name_t.getText();
-                        String pwd_old = String.valueOf(passward_old.getPassword());
-                        String pwd_new = String.valueOf(passward_new.getPassword());
-                        UserDao user = new UserDao();
-                        try {
-                            Object[] result = null;
-                            System.out.println(jobnum+pwd_old);
-                            result  =user.selectUser(jobnum,pwd_old); //根据用户查询信息
-                            if (result[0] != null){
-                                int res = user.updateUser(jobnum,pwd_new);
-                                if (res>0){
-                                    JOptionPane.showMessageDialog(null,"修改成功！");
-                                    name_t.setText("");
-                                    passward_old.setText("");
-                                    passward_new.setText("");
-                                    passwardFrame.dispose();//关闭
-                                }
-                                else{
-                                    JOptionPane.showMessageDialog(null,"修改失败！");
-                                }
+            SwingUtilities.invokeLater(new Runnable() {
+                @Override
+                public void run() {
+                    String jobnum = name_t.getText();
+                    String pwd_old = String.valueOf(passward_old.getPassword());
+                    String pwd_new = String.valueOf(passward_new.getPassword());
+                    UserDao user = new UserDao();
+                    try {
+                        Object[] result = null;
+                        System.out.println(jobnum+pwd_old);
+                        result  =user.selectUser(jobnum,pwd_old); //根据用户查询信息
+                        if (result[0] != null){
+                            int res = user.updateUser(jobnum,pwd_new);
+                            if (res>0){
+                                JOptionPane.showMessageDialog(null,"修改成功！");
+                                name_t.setText("");
+                                passward_old.setText("");
+                                passward_new.setText("");
+                                passwardFrame.dispose();//关闭
+                                new LoginView();
                             }
-                            else{ //当账号或密码错误时
-                                JOptionPane.showMessageDialog(null,"用户名或密码错误！");
+                            else{
+                                JOptionPane.showMessageDialog(null,"修改失败！");
                             }
-                        } catch (SQLException ex) {
-                            ex.printStackTrace();
                         }
+                        else{ //当账号或密码错误时
+                            JOptionPane.showMessageDialog(null,"用户名或密码错误！");
+                        }
+                    } catch (SQLException ex) {
+                        ex.printStackTrace();
                     }
-                });
+                }
+            });
             }
         });
 
         cancel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                SwingUtilities.invokeLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        passwardFrame.dispose();
-                        new LoginView();
-                    }
-                });
+            SwingUtilities.invokeLater(new Runnable() {
+                @Override
+                public void run() {
+                    passwardFrame.dispose();
+                    new LoginView();
+                }
+            });
             }
         });
 
