@@ -8,13 +8,17 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.sql.SQLException;
-
+/*
+商品信息查询界面
+输入商品Id可以查询商品信息
+ */
 
 public class ProductSelectView {
     //信息查询界面
+
     public static void init(){
         JFrame productFrame = new JFrame("商品信息查询");
-        JLabel message = new JLabel("请输入商品名称...");
+        JLabel message = new JLabel("请输入商品ID...");
         JLabel label = new JLabel("商品信息：");
         JTable table=new JTable();
         DefaultTableModel tableModel = (DefaultTableModel) table.getModel();
@@ -27,11 +31,13 @@ public class ProductSelectView {
         jScrollPane.setBounds(40,130,400,220);
         table.setBorder(BorderFactory.createLineBorder(Color.BLACK));
         JTextField id = new JTextField(20);
+        JButton del = new JButton("删除");
         JButton select = new JButton("查询");
         label.setFont(new Font("宋体",Font.BOLD,15));
         message.setFont(new Font("宋体",Font.BOLD,15));
         message.setBounds(10,30,200,25);
         id.setBounds(40,60,400,25);
+        del.setBounds(300,90,60,20);
         select.setBounds(370,90,60,20);
         label.setBounds(10,110,90,20);
         JPanel panel = new JPanel();
@@ -39,6 +45,7 @@ public class ProductSelectView {
         productFrame.add(panel);
         panel.add(message);
         panel.add(id);
+        panel.add(del);
         panel.add(select);
         panel.add(label);
         panel.add(jScrollPane);
@@ -58,7 +65,6 @@ public class ProductSelectView {
                     //点击查询
                     String name = id.getText();
                     GoodsDao goodsDao = new GoodsDao();
-
                     try {
                         Object[] data= goodsDao.selectProductID(name);
                         if (data[0] !=null){
@@ -72,6 +78,29 @@ public class ProductSelectView {
                     }
                 }
             });
+            }
+        });
+        del.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                SwingUtilities.invokeLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        GoodsDao goodsDao = new GoodsDao();
+                        String id = (String) table.getValueAt(table.getSelectedRow(),0);
+                        try {
+                            int result = goodsDao.delProduct(id);
+                            if (result != -1){
+                                JOptionPane.showMessageDialog(null,"删除成功！");
+                                tableModel.setRowCount(0);
+                            }else{
+                                JOptionPane.showMessageDialog(null,"删除失败！");
+                            }
+                        } catch (SQLException throwables) {
+                            throwables.printStackTrace();
+                        }
+                    }
+                });
             }
         });
     }

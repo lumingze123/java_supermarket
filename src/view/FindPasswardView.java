@@ -7,7 +7,9 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.sql.SQLException;
-
+/*
+修改密码界面，根据旧密码修改成新密码
+ */
 public class FindPasswardView {
     //修改密码界面
     public void init(){

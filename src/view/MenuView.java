@@ -6,7 +6,17 @@ import Util.SwingUtil;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+/*
+功能界面
+左上方显示当前登录收银员的账号与名字
+右上方显示头像，Util文件夹里面的都是关于这个头像的设置
+下面四个按钮分别跳转到四个功能界面
 
+ProductIforamationInView商品录入界面
+ProductSelectView商品查询界面
+CashView结账界面
+CashCardView购物卡管理界面
+ */
 public class MenuView {
     //选择所需功能界面
     public MenuView(String ID,String name){

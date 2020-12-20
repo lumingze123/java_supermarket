@@ -162,4 +162,36 @@ public class GoodsDao extends JDBC.Jdbc_Conn{
             }
         }
     }
+
+    public int delProduct(String id) throws SQLException {
+
+        jdbc();
+        try {
+            //delete from student where id=1
+            String select_sql = "DELETE FROM product where p_id=?";
+            pt = conn.prepareStatement(select_sql);
+            pt.setString(1, id);
+
+            int result = pt.executeUpdate();
+
+            return result;
+
+        }
+        catch (SQLException e){
+            System.out.println("222"+e.getMessage());
+            return -1;
+        }
+        finally {
+
+            if (rs != null){
+                rs.close();
+            }
+            if (pt != null){
+                pt.close();
+            }
+            if (conn != null){
+                conn.close();
+            }
+        }
+    }
 }

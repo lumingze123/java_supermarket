@@ -9,7 +9,12 @@ import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.sql.SQLException;
-
+/*
+login登录界面
+可以前往RegisterView注册界面，注册新的收银员账号
+可以前往FindPasswardView修改密码界面，修改账号的密码
+可以前往MenuView功能界面，登录成功后前往主要功能区域
+ */
 
 public class LoginView {
 
@@ -53,14 +58,15 @@ public class LoginView {
         mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);//在此窗体上发起 "close" 时默认执行的操作,使用 System exit 方法退出应用程序。
         mainFrame.setVisible(true);//窗口显示
 
-        //监听事件
-        mainFrame.addWindowListener(new WindowAdapter() { //窗口监听
+        //窗口监听
+        mainFrame.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) { //关闭
                 System.exit(0);
             }
         });
-        register.addMouseListener(new MouseAdapter() {  //注册监听
+        //注册监听
+        register.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 SwingUtilities.invokeLater((new Runnable() {
@@ -84,8 +90,8 @@ public class LoginView {
                 register.setForeground(Color.BLACK);
             }
         });
-
-        findPassward.addMouseListener(new MouseAdapter() { //修改密码监听
+        //修改密码监听
+        findPassward.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 SwingUtilities.invokeLater((new Runnable() {
@@ -109,8 +115,8 @@ public class LoginView {
                 findPassward.setForeground(Color.BLACK);
             }
         });
-
-        login.addMouseListener(new MouseAdapter() {  //登录监听
+        //登录监听
+        login.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 SwingUtilities.invokeLater(new Runnable() {

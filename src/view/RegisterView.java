@@ -8,7 +8,9 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.sql.SQLException;
-
+/*
+注册界面，注册新的收银员信息账号
+ */
 public class RegisterView {
     //注册页面
     public void init(){

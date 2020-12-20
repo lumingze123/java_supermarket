@@ -9,6 +9,13 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.sql.SQLException;
 
+/*
+购物卡信息查询
+输入购物卡id可以查询购物卡信息
+选中购物卡点击充值可以给该购物卡充值
+可以跳转新建购物卡
+ */
+
 public class CashCardView {
     //购物卡管理界面
     public void init() {

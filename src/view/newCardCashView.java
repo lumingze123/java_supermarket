@@ -8,7 +8,11 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.sql.SQLException;
-
+/*
+办理新的购物卡
+可以只办理购物卡，
+也可以办理有会员的购物卡
+ */
 public class newCardCashView {
     //新建购物卡
     public static void init(){

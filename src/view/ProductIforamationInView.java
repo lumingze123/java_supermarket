@@ -10,7 +10,11 @@ import java.awt.event.MouseEvent;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-
+/*
+商品录入界面
+可以输入新的id添加新的商品
+也可以输入重复的id更新产品价格和数量
+ */
 
 public class ProductIforamationInView {
     //商品信息录入模块界面

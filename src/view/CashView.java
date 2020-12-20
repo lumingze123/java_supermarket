@@ -8,7 +8,20 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.sql.SQLException;
+/*
+结账界面
+上面可以选择是否有购物卡，并输入卡号。
+可以查询购物卡还有多少钱
+右边根据商品号，和数量，添加相应商品
+加多了选中想取消的商品，点取消可以删除
 
+1：有购物卡且是会员：扣购物卡的钱且九折
+2：有购物卡没有会员：扣购物卡的钱原价
+3：都没有：用现金(无具体操作)
+
+2和3：如果消费满200可以输入信息办理会员卡，不输入确认就是不办理
+如果已经是会员，或者是新办了会员卡都会记录账单数据库bill，不是会员不记
+ */
 public class CashView{
 	double allMoney = 0;
     //结账管理界面
